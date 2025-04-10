@@ -1,6 +1,8 @@
 const Route = require("../models/Route");
 const dijkstra = require("../utils/dijkstra");
 const aStar = require("../utils/aStar");
+const bfs = require("../utils/bfs");
+const dfs = require("../utils/dfs");
 
 /**
  * Calculate optimal route using Dijkstra or A* algorithm
@@ -21,6 +23,10 @@ exports.calculateRoute = async (req, res) => {
     let route;
     if (algorithm === "dijkstra") {
       route = dijkstra.findShortestPath(source, destination);
+    } else if (algorithm === "bfs") {
+      route = bfs.findPath(source, destination);
+    } else if (algorithm === "dfs") {
+      route = dfs.findPath(source, destination);
     } else {
       route = aStar.findOptimalPath(source, destination);
     }
@@ -32,6 +38,7 @@ exports.calculateRoute = async (req, res) => {
         distance: route.distance,
         estimatedTime: route.estimatedTime,
         points: route.points,
+        algorithm: algorithm,
       },
     });
   } catch (error) {
